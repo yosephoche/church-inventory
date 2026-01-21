@@ -103,6 +103,7 @@ export default async function handler(
         data: {
             full_name: full_name || '',
             role: role,
+            password_set: false,  // Track that password needs to be set
         },
         redirectTo: `${process.env.NEXT_PUBLIC_SITE_URL}/auth/callback`,
     })

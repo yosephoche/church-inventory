@@ -27,11 +27,15 @@ export default function SetPasswordPage() {
     const password = watch('password')
 
     useEffect(() => {
-        // Check if user has a valid session
+        // Check if user has a valid session and needs password setup
         const checkSession = async () => {
             const { data: { session } } = await supabase.auth.getSession()
+
             if (!session) {
                 router.replace('/login?error=session_expired')
+            } else if (session.user.user_metadata?.password_set !== false) {
+                // Password already set, redirect to dashboard
+                router.replace('/dashboard')
             }
         }
         checkSession()
@@ -43,9 +47,12 @@ export default function SetPasswordPage() {
         setSuccessMessage('')
 
         try {
-            // Update the user's password
+            // Update the user's password and mark as set
             const { error } = await supabase.auth.updateUser({
                 password: data.password,
+                data: {
+                    password_set: true,  // Mark password as set in metadata
+                },
             })
 
             if (error) {

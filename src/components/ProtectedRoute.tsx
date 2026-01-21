@@ -17,6 +17,9 @@ export default function ProtectedRoute({ children, requireAdmin = false }: Prote
         if (!isLoading) {
             if (!user) {
                 router.replace('/login')
+            } else if (user.user_metadata?.password_set === false) {
+                // User needs to complete password setup first
+                router.replace('/auth/set-password')
             } else if (requireAdmin && !isAdmin) {
                 router.replace('/dashboard')
             }

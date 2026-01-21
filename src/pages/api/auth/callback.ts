@@ -38,13 +38,17 @@ export default async function handler(
             return res.redirect('/login?error=session_expired')
         }
 
-        // For invitations, redirect to password setup page
-        if (type === 'invite') {
+        // Check if user needs to set password
+        const user = data.session?.user
+        const passwordSet = user?.user_metadata?.password_set ?? true  // Default true for existing users
+
+        // For invitations without password, require password setup
+        if (type === 'invite' && !passwordSet) {
             return res.redirect('/auth/set-password')
         }
 
-        // For other auth types (recovery, signup), redirect to dashboard
-        return res.redirect('/auth/set-password')
+        // For other auth types or users with password already set, go to dashboard
+        return res.redirect('/dashboard')
     } catch (error) {
         console.error('Unexpected error in auth callback:', error)
         return res.redirect('/login?error=server_error')
