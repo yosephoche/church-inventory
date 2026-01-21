@@ -44,7 +44,7 @@ export default async function handler(
         }
 
         // For other auth types (recovery, signup), redirect to dashboard
-        return res.redirect('/dashboard')
+        return res.redirect('/auth/set-password')
     } catch (error) {
         console.error('Unexpected error in auth callback:', error)
         return res.redirect('/login?error=server_error')
