@@ -104,6 +104,7 @@ export default async function handler(
             full_name: full_name || '',
             role: role,
         },
+        redirectTo: `${process.env.NEXT_PUBLIC_SITE_URL}/auth/callback`,
     })
 
     if (inviteError) {

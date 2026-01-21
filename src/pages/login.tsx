@@ -32,6 +32,27 @@ export default function LoginPage() {
         if (!isLoading && user) {
             router.replace('/dashboard')
         }
+
+        // Handle callback errors from auth flow
+        const error = router.query.error as string
+        if (error) {
+            switch (error) {
+                case 'invalid_link':
+                    setErrorMessage('Link undangan tidak valid atau sudah kedaluwarsa. Silakan minta undangan baru.')
+                    break
+                case 'invalid_token':
+                    setErrorMessage('Token verifikasi tidak valid. Silakan coba lagi.')
+                    break
+                case 'session_expired':
+                    setErrorMessage('Sesi Anda telah berakhir. Silakan login kembali.')
+                    break
+                case 'server_error':
+                    setErrorMessage('Terjadi kesalahan server. Silakan coba lagi nanti.')
+                    break
+                default:
+                    setErrorMessage('Terjadi kesalahan saat memproses permintaan Anda.')
+            }
+        }
     }, [user, isLoading, router])
 
     const onSubmit = async (data: LoginFormInput) => {
