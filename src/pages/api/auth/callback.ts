@@ -50,3 +50,4 @@ export default async function handler(
         return res.redirect('/login?error=server_error')
     }
 }
+
